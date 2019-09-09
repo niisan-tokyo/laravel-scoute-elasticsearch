@@ -1,0 +1,21 @@
+{
+    "require": {
+        "laravel/scout": "^7.1",
+        "elasticsearch/elasticsearch": "7.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Niisan\\Laravel\\": "src/"
+        }
+    },
+    "require-dev": {
+        "orchestra/testbench": "^3.8"
+    }
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Niisan\\Laravel\\Scout\\ServiceProvider"
+            ]
+        }
+    }
+}
