@@ -35,6 +35,10 @@ class ElasticSearchEngine extends Engine
                 ]
             ];
 
+            // $search = ['search' => collect($searchableData)->flatten()->reduce(function ($acc, $cur) {
+            //     return $acc . ' ' . $cur;
+            // }, '')];
+
             $params['body'][] = [
                 'doc' => $searchableData,
                 'doc_as_upsert' => true
@@ -91,7 +95,7 @@ class ElasticSearchEngine extends Engine
             return $model->newCollection();
         }
 
-        $objectIds = collect($hits)->pluck('objectID')->values()->all();
+        $objectIds = collect($hits)->pluck('_id')->values()->all();
         $objectIdPositions = array_flip($objectIds);
 
         return $model->getScoutModelsByIds($builder, $objectIds)
@@ -114,14 +118,11 @@ class ElasticSearchEngine extends Engine
 
     private function performSearch(Builder $builder, $options = [])
     {
-        $where = collect($builder->wheres)->map(function ($val, $key) {
-            return ['match' => [$key => $val]];
-        })->values()->all();
-
+        
         $query = [
             'query' => [
-                'bool' => [
-                    'must' => $where
+                'query_string' => [
+                    'query' => '*' . $builder->query['search'] . '*'
                 ]
             ]
         ];
