@@ -118,11 +118,12 @@ class ElasticSearchEngine extends Engine
 
     private function performSearch(Builder $builder, $options = [])
     {
-        
+        $search = explode(' ', str_replace('　', ' ', $builder->query['search']));
+
         $query = [
             'query' => [
                 'query_string' => [
-                    'query' => '*' . $builder->query['search'] . '*'
+                    'query' => '*' . implode('* AND *', $search) . '*'
                 ]
             ]
         ];
